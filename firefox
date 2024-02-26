@@ -1,0 +1,7 @@
+#wen es bei boxen stört, dass in firefox immer das http:// vor der URL weggeschnitten wird und man ständig zu einer Suchmaschine redirected wird
+1) about:config aufrufen
+2) browser.urlbar.trimURLs auf false setzen
+
+#Wenn webserver auf ports unter 1024 laufen
+1) about:config aufrufen
+2) network.security.ports.banned.override hinzufügen als string mit dem wert 0-1024
