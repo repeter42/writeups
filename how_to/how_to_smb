@@ -1,0 +1,6 @@
+Document about: HOW TO PENTEST "SMB"
+
+# enumerating smb shares
+// a smb share is sorta like folder on a smb server ... you just dont know the name of
+// the enumration tool will be "enum4linux" this is a general purpose enumeration tool ... but it contains all sorts of smb as well
+$ enum4linux 

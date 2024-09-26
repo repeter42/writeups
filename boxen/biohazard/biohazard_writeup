@@ -1,0 +1,232 @@
+THM room BIOHAZARD
+// Welcome to Biohazard room, a puzzle-style CTF. Collecting the item, solving the puzzle and escaping the nightmare is your top priority. Can you survive until the end?
+
+# Target: Port Scan
+$ sudo nmap thmbox -->
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+
+## Website: directory enumeration
+$ gobuster dir -u http://thmbox -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+	-->
+/images               (Status: 301) [Size: 301] [--> http://thmbox/images/]
+/css                  (Status: 301) [Size: 298] [--> http://thmbox/css/]
+/js                   (Status: 301) [Size: 297] [--> http://thmbox/js/]
+/attic                (Status: 301) [Size: 300] [--> http://thmbox/attic/]
+/server-status        (Status: 403) [Size: 271]
+-- holy shit, this was useless,  besides attic ... can be found later tho
+
+# http://thmbox
+//team name: {stars alpha team} !!
+// possible usernames: chris, jill, barry, weasker, joseph
+_link to http://thmbox/mansionmain/
+
+# http://thmbox/mansionmain/
+_view source code: /diningRoom/
+
+# http://thmbox/diningRoom
+_view source code: "SG93IGFib3V0IHRoZSAvdGVhUm9vbS8=" | base64 -d --> "How about the /teaRoom/"
+_link to:  http://thmbox/diningRoom/emblem.php
+# http://thmbox/diningRoom/emblem.php
+// "emblem"{fec832623ea498e20bf4fe1821d58727} !!
+// referesh /diningRoom/
+# http://thmbox/diningRoom/
+_input emblem --> Nothing happend
+_input golden_emblem --> "klfvg ks r wimgnd biz mpuiui ulg fiemok tqod. Xii jvmc tbkg ks tempgf tyi_hvgct_jljinf_kvc"
+\_> Viginere key:"rebecca" --> "there is a shield key inside the dining room. The html page is called the_great_shield_key" 
+--> http://thmbox/diningRoom/the_great_shield_key.html --> "shield_key"{48a7a9227cd7eb89f0a062590798cbac} !!
+
+# http://thmbox/teaRoom/
+// possible username: kenneth
+_link to:  http://thmbox/teaRoom/master_of_unlock.html --> "lock_pick"{037b35e2ff90916a9abf99129c8e1837} !!
+// view page: "/artRoom"
+
+# http://thmbox/artRoom
+_link to  http://thmbox/artRoom/MansionMap.html
+# http://thmbox/artRoom/MansionMap.html
+_view page: 
+"Look like a map
+
+Location:
+/diningRoom/	|--> http://thmbox/diningRoom/emblem_slot.php --> http://thmbox/diningRoom/the_great_shield_key.html --> done
+/teaRoom/	|--> done
+/artRoom/	|--> done
+/barRoom/	|--> http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/ --> http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/musicNote.html --> http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/barRoomHidden.php --> done
+/diningRoom2F/	|--> http://thmbox/diningRoom/sapphire.html --> done 
+/tigerStatusRoom/ |--> http://thmbox/tigerStatusRoom/gem.php --> crest 1 --> done
+/galleryRoom/	|--> http://thmbox/galleryRoom/note.txt --> crest 2 --> done
+/studyRoom/	|--> http://thmbox/studyRoom28341c5e98c93b89258a6389fd608a3c/ --> download doom.tar.gz --> done
+/armorRoom/	|--> http://thmbox/armorRoom547845982c18936a25a9b37096b21fc1/ --> http://thmbox/armorRoom547845982c18936a25a9b37096b21fc1/note.txt --> crest 3 --> done
+/attic/"	|--> http://thmbox/attic909447f184afdfb352af8b8a25ffff1d/ --> http://thmbox/attic909447f184afdfb352af8b8a25ffff1d/note.txt --> crest 4 --> done
+# crests revealed:
+/hidden_closet/	?--> http://thmbox/hiddenCloset8997e740cb7f5cece994381b9477ec38/ 
+
+# http:/thmbox/barRoom/  
+// submit lock_pick --> redirect: http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/
+# http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/
+// piano submit button --> POST piano.php
+_link to: musicNote.html (written as "moonlight somata")
+# http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/musicNote.html
+// "V2XG2LDL5ZWQZLFOR5TGNRSMQ3TEZDFMFTDMNLGGVRGIYZWGNSGCZLDMU3GCMLGGY3TMZL5" | base32 -d --> "music_sheet"{362d72deaf65f5bdc63daece6a1f676e}
+// when submitted in /barRoom357162e3db904857963e6e0b64b96ba7/ --> redisect: http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/barRoomHidden.php
+# http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/barRoomHidden.php
+_link to: golden_emblem.php --> "gold_emblem"{58a8c41a9d08b8a4e38d02a4d7ff4843} !!
+# http://thmbox/barRoom357162e3db904857963e6e0b64b96ba7/barRoomHidden.php (refresh)
+_input: golden emblem --> nothing happend
+_input: emblem --> "rebecca"
+
+# http://thmbox/diningRoom2F/
+_view page source: "Lbh trg gur oyhr trz ol chfuvat gur fgnghf gb gur ybjre sybbe. Gur trz vf ba gur qvavatEbbz svefg sybbe. Ivfvg fnccuver.ugzy"
+\--> ROT13 -->  You get the blue gem by pushing the status to the lower floor. The gem is on the diningRoom first floor. Visit sapphire.html
+# http://thmbox/diningRoom/sapphire.html
+// "blue_jewel"{e1d457e96cac640f863ec7bc475d48aa} !!
+
+# http://thmbox/tigerStatusRoom
+_input: blue_jewel --> /gem.php
+-->
+crest "1":
+"S0pXRkVVS0pKQkxIVVdTWUpFM0VTUlk9" 
+Hint 1: Crest 1 has been encoded twice
+Hint 2: Crest 1 contanis 14 letters
+Note: You need to collect all 4 crests, combine and decode to reavel another path
+The combination should be crest 1 + crest 2 + crest 3 + crest 4. Also, the combination is a type of encoded base and you need to decode it"
+//cyberchef
+$ crest1 | from base64 | from base32 | from base64
+--> "FTP user: "
+
+# http://thmbox/galleryRoom
+_link to: /note.txt -->
+crest "2":
+"GVFWK5KHK5WTGTCILE4DKY3DNN4GQQRTM5AVCTKE"
+Hint 1: Crest 2 has been encoded twice
+Hint 2: Crest 2 contanis 18 letters
+Note: You need to collect all 4 crests, combine and decode to reavel another path
+//cyberchef
+$ crest2 | from base32  | from base58 
+-->"h1bnRlciwgRlRQIHBh"
+
+
+# http://thmbox/studyRoom/
+_input:  REQUIRED (helmet symbol)
+\--> tried: emblem, golden_emblem, lock_pick
+
+# http://thmbox/armorRoom/
+_input:  shield_key --> http://thmbox/armorRoom547845982c18936a25a9b37096b21fc1 --> http://thmbox/armorRoom547845982c18936a25a9b37096b21fc1/note.txt --> 
+crest 3:
+"MDAxMTAxMTAgMDAxMTAwMTEgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTAwMTEgMDAxMDAwMDAgMDAxMTAxMDAgMDExMDAxMDAgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTAxMTAgMDAxMDAwMDAgMDAxMTAxMDAgMDAxMTEwMDEgMDAxMDAwMDAgMDAxMTAxMDAgMDAxMTEwMDAgMDAxMDAwMDAgMDAxMTAxMTAgMDExMDAwMTEgMDAxMDAwMDAgMDAxMTAxMTEgMDAxMTAxMTAgMDAxMDAwMDAgMDAxMTAxMTAgMDAxMTAxMDAgMDAxMDAwMDAgMDAxMTAxMDEgMDAxMTAxMTAgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTEwMDEgMDAxMDAwMDAgMDAxMTAxMTAgMDExMDAwMDEgMDAxMDAwMDAgMDAxMTAxMDEgMDAxMTEwMDEgMDAxMDAwMDAgMDAxMTAxMDEgMDAxMTAxMTEgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTAxMDEgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTAwMDAgMDAxMDAwMDAgMDAxMTAxMDEgMDAxMTEwMDAgMDAxMDAwMDAgMDAxMTAwMTEgMDAxMTAwMTAgMDAxMDAwMDAgMDAxMTAxMTAgMDAxMTEwMDA="
+Hint 1: Crest 3 has been encoded three times
+Hint 2: Crest 3 contanis 19 letters
+Note: You need to collect all 4 crests, combine and decode to reavel another path
+The combination should be crest 1 + crest 2 + crest 3 + crest 4. Also, the combination is a type of encoded base and you need to decode it
+// cyberchef
+$ crest3 | from base64 | (from binary | from hex) | from base64 
+--> "ss: you_cant_h"
+
+# http://thmbox/attic/
+_input:  shield_key --> http://thmbox/attic909447f184afdfb352af8b8a25ffff1d/ --> http://thmbox/attic909447f184afdfb352af8b8a25ffff1d/note.txt -->
+crest 4:
+"gSUERauVpvKzRpyPpuYz66JDmRTbJubaoArM6CAQsnVwte6zF9J4GGYyun3k5qM9ma4s"
+Hint 1: Crest 2 has been encoded twice
+Hint 2: Crest 2 contanis 17 characters
+Note: You need to collect all 4 crests, combine and decode to reavel another path
+The combination should be crest 1 + crest 2 + crest 3 + crest 4. Also, the combination is a type of encoded base and you need to decode it
+// cyberchef
+$ crest4 | from base58 | from hex
+--> "pZGVfZm9yZXZlcg==" | ??? (so fucking close :cry_face:)
+// chat gpt "pZGVfZm9yZXZlcg==" --> "ZGVfZm9yZXZlcg==" | base64 -d --> "de_forever"
+// in kombination mit crest3 + 4 --> you_cant_h"ide_forever" 
+
+====> decoded crests reveal path:
+
+"FTP user: " + "crest2 -d" + "ss: you_cant_h" + "crest4 -d"
+
+// PROPS incoming
+// HAZARD found intendet way to solve crests:
+// alle crests ergeben zusammen einen base64 encodete daten
+
+$ crest1 | from base64 | from base32 > crest1_d ("RlRQIHVzZXI6IG")
+$ crest2 | from base32  | from base58 > crest2 ("h1bnRlciwgRlRQIHBh")
+$ crest3 | from base64 | (from binary | from hex) > crest3_d ("c3M6IHlvdV9jYW50X2h")
+$ crest4 | from base58 | from hex  > crest4_d ("pZGVfZm9yZXZlcg==")
+
+cat crest1_d crest2_d crest3_d crest4_d | base64 -d --> "FTP user: hunter, FTP pass: you_cant_hide_forever"
+
+# FTP credentials:
+user: "hunter"
+pass: "you_cant_hide_forever"
+
+## access ftp 
+001-key.jpg
+002-key.jpg
+003-key.jpg
+helmet_key.txt.gpg
+important.txt
+
+## take a look at files
+$cat important.txt-->
+Jill,
+
+I think the helmet key is inside the text file, but I have no clue on decrypting stuff. Also, I come across a /hidden_closet/ door but it was locked.
+
+From,
+Barry
+
+# http://thmbox/hidden_closet/
+_input: required (helmet symbol)
+
+## Extracting data from files
+$ steghide extract --stegofile 001-key.jpg
+Enter passphrase: 	// passphrase: $enter
+wrote extracted data to "key-001.txt".
+$ cat key-001.txt
+"cGxhbnQ0Ml9jYW"
+
+$ exiftool 002-key.jpg
+Comment                         : "5fYmVfZGVzdHJveV9"
+
+$ binwalk --extract 003-key.jpg
+1930          0x78A           Zip archive data, at least v2.0 to extract, uncompressed size: 14, name: key-003.txt
+$ cat key-003.txt
+"3aXRoX3Zqb2x0"
+
+# use data to decrypt gpg file (gpg = pgp encrypted file)
+// put key togethet
+"cGxhbnQ0Ml9jYW5fYmVfZGVzdHJveV93aXRoX3Zqb2x0" | base64 -d --> "plant42_can_be_destroy_with_vjolt"
+$ gpg -o helmet_key.txt -d helmet_key.txt.gpg
+$ cat helmet_key.txt
+"helmet_key"{458493193501d2b94bbab2e727f8db4b} !! __NOT_YET_USED__
+
+# go back to /studyRoom/ and /hidden_closet/ 
+# http://thmbox/studyRoom/
+_redirect: http://thmbox/studyRoom28341c5e98c93b89258a6389fd608a3c/ --> download: "doom.tar.gz"
+$ tar -xf doom.tar.gz --> eagle_medal.txt
+$ cat eagle_medal.txt 
+"SSH user: umbrella_guest"
+
+# http://thmbox/hiddenCloset/
+_input helmet_key --> http://thmbox/hiddenCloset8997e740cb7f5cece994381b9477ec38/ 	// found team Bravo team leader: "Enrico"
+	--> http://thmbox/hiddenCloset8997e740cb7f5cece994381b9477ec38/MO_DISK1.txt --> "wpbwbxr wpkzg pltwnhro, txrks_xfqsxrd_bvv_fy_rvmexa_ajk"
+	--> --> http://thmbox/hiddenCloset8997e740cb7f5cece994381b9477ec38/wolf_medal.txt --> "SSH password: T_virus_rules"
+
+# decoding / decrypting 
+"wpbwbxr wpkzg pltwnhro, txrks_xfqsxrd_bvv_fy_rvmexa_ajk" --> TRIED: ROT1-26 		IDEAS: Vigenere?(no passphrase tho)
+
+# ssh log in (user: umbrella_guest ; pass: T_virus_rules)
+// looking around in filesystem 
+// found .jailcell/chris.txt --> MO disk 2: "albert"
+
+# Vigenere  Cyberchef
+"wpbwbxr wpkzg pltwnhro, txrks_xfqsxrd_bvv_fy_rvmexa_ajk" key:"albert" --> "weasker login password, stars_members_are_my_guinea_pig"
+
+# ssh login as weasker (user: weasker ; pass: stars_members_are_my_guinea_pig )
+$sudo -l
+User weasker may run the following commands on umbrella_corp:
+    (ALL : ALL) ALL
+
+$ cat /root/root.txt
+flag: 3c5794a00dc56c35f2bf096571edf3bf
+
+
+
+
