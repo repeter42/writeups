@@ -1,0 +1,42 @@
+Writeup zu dem THM raum Breakme
+
+
+# Target Scanning
+
+## nmap - Port Scan 
+$ sudo nmap -sS box -p- -T4
+-->
+22/tcp open  ssh     OpenSSH 8.4p1 Debian 5+deb11u1 (protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.56 ((Debian))
+
+## enum4linux - general target scaning 
+$ enum4linux box
+-->
+Known Usernames .. administrator, guest, krbtgt, domain admins, root, bin, none
+
+
+# Web enumeration
+ 
+## gobuster - directory enumeration
+$ gobuster dir -u http://box -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+-->
+/wordpress            (Status: 301) [Size: 298] [--> http://box/wordpress/]
+/manual               (Status: 301) [Size: 295] [--> http://box/manual/]
+	
+## gobuster
+$ gobuster dir -u http://box/wordpress -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+-->
+/wp-content           (Status: 301) [Size: 309] [--> http://box/wordpress/wp-content/] 		--> 
+/wp-includes          (Status: 301) [Size: 310] [--> http://box/wordpress/wp-includes/]
+/wp-admin             (Status: 301) [Size: 307] [--> http://box/wordpress/wp-admin/]
+
+## visit website - http://box/wordpress/
+-->
+blog posts from: "admin, Annie Steiner"
+links to further websites
+
+## visit website - http://box/wordpress/index.php/breakme/
+
+
+## visit website - http://box/wordpress/index.php/sample-page/
+
