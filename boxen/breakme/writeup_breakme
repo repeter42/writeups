@@ -26,17 +26,38 @@ $ gobuster dir -u http://box -w /usr/share/wordlists/dirbuster/directory-list-lo
 ## gobuster
 $ gobuster dir -u http://box/wordpress -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
 -->
-/wp-content           (Status: 301) [Size: 309] [--> http://box/wordpress/wp-content/] 		--> 
-/wp-includes          (Status: 301) [Size: 310] [--> http://box/wordpress/wp-includes/]
-/wp-admin             (Status: 301) [Size: 307] [--> http://box/wordpress/wp-admin/]
+/wp-content           (Status: 301) [Size: 309] [--> http://box/wordpress/wp-content/] 		--> blank
+/wp-includes          (Status: 301) [Size: 310] [--> http://box/wordpress/wp-includes/]		--> 403 Forbidden
+/wp-admin             (Status: 301) [Size: 307] [--> http://box/wordpress/wp-admin/]		--> wp login --> tried default [user:pass] --> nothing
 
 ## visit website - http://box/wordpress/
 -->
-blog posts from: "admin, Annie Steiner"
 links to further websites
+blog posts from: "admin, Annie Steiner"
+_view_source_code : wordpress 6.4.3
+ \_ post by admin is link: http://box/wordpress/index.php/2023/08/09/hello-world/	
 
 ## visit website - http://box/wordpress/index.php/breakme/
-
+--> nothing intersting
 
 ## visit website - http://box/wordpress/index.php/sample-page/
+--> nothing intersting
+
+## visit website - http://box/wordpress/index.php/2023/08/09/hello-world/
+--> 
+possible to post comment (displayed on website)
+\_ possible exploitation arguments: "comment, name, email, website"
+
+# TO BE CONTINUED
+# not enough knowledge --> portwsigger academy LETS GO
+
+
+
+
+
+
+
+
+
+
 

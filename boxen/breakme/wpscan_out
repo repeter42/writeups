@@ -1,0 +1,150 @@
+$ wpscan --url http://box/wordpress/ --api-token 1ZuqcrdZb0xmIa6WO38jUV6lZ3j6bT6cavfEuwToIGU
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.27
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: http://box/wordpress/ [10.10.201.133]
+[+] Started: Fri Sep 27 10:59:58 2024
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entry: Server: Apache/2.4.56 (Debian)
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: http://box/wordpress/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[+] WordPress readme found: http://box/wordpress/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] The external WP-Cron seems to be enabled: http://box/wordpress/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[+] WordPress version 6.4.3 identified (Insecure, released on 2024-01-30).
+ | Found By: Rss Generator (Passive Detection)
+ |  - http://box/wordpress/index.php/feed/, <generator>https://wordpress.org/?v=6.4.3</generator>
+ |  - http://box/wordpress/index.php/comments/feed/, <generator>https://wordpress.org/?v=6.4.3</generator>
+ |
+ | [!] 4 vulnerabilities identified:
+ |
+ | [!] Title: WP < 6.5.2 - Unauthenticated Stored XSS
+ |     Fixed in: 6.4.4
+ |     References:
+ |      - https://wpscan.com/vulnerability/1a5c5df1-57ee-4190-a336-b0266962078f
+ |      - https://wordpress.org/news/2024/04/wordpress-6-5-2-maintenance-and-security-release/
+ |
+ | [!] Title: WordPress < 6.5.5 - Contributor+ Stored XSS in HTML API
+ |     Fixed in: 6.4.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/2c63f136-4c1f-4093-9a8c-5e51f19eae28
+ |      - https://wordpress.org/news/2024/06/wordpress-6-5-5/
+ |
+ | [!] Title: WordPress < 6.5.5 - Contributor+ Stored XSS in Template-Part Block
+ |     Fixed in: 6.4.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/7c448f6d-4531-4757-bff0-be9e3220bbbb
+ |      - https://wordpress.org/news/2024/06/wordpress-6-5-5/
+ |
+ | [!] Title: WordPress < 6.5.5 - Contributor+ Path Traversal in Template-Part Block
+ |     Fixed in: 6.4.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/36232787-754a-4234-83d6-6ded5e80251c
+ |      - https://wordpress.org/news/2024/06/wordpress-6-5-5/
+
+[+] WordPress theme in use: twentytwentyfour
+ | Location: http://box/wordpress/wp-content/themes/twentytwentyfour/
+ | Last Updated: 2024-07-16T00:00:00.000Z
+ | Readme: http://box/wordpress/wp-content/themes/twentytwentyfour/readme.txt
+ | [!] The version is out of date, the latest version is 1.2
+ | Style URL: http://box/wordpress/wp-content/themes/twentytwentyfour/style.css
+ | Style Name: Twenty Twenty-Four
+ | Style URI: https://wordpress.org/themes/twentytwentyfour/
+ | Description: Twenty Twenty-Four is designed to be flexible, versatile and applicable to any website. Its collecti...
+ | Author: the WordPress team
+ | Author URI: https://wordpress.org
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 1.0 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - http://box/wordpress/wp-content/themes/twentytwentyfour/style.css, Match: 'Version: 1.0'
+
+[+] Enumerating All Plugins (via Passive Methods)
+[+] Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[i] Plugin(s) Identified:
+
+[+] wp-data-access
+ | Location: http://box/wordpress/wp-content/plugins/wp-data-access/
+ | Last Updated: 2024-09-18T00:01:00.000Z
+ | [!] The version is out of date, the latest version is 5.5.14
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ |
+ | [!] 3 vulnerabilities identified:
+ |
+ | [!] Title: WP Data Access < 5.3.8 - Subscriber+ Privilege Escalation
+ |     Fixed in: 5.3.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/7871b890-5172-40aa-88f2-a1b95e240ad4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-1874
+ |      - https://www.wordfence.com/blog/2023/04/privilege-escalation-vulnerability-patched-promptly-in-wp-data-access-wordpress-plugin/
+ |
+ | [!] Title: Freemius SDK < 2.5.10 - Reflected Cross-Site Scripting
+ |     Fixed in: 5.3.11
+ |     References:
+ |      - https://wpscan.com/vulnerability/39d1f22f-ea34-4d94-9dc2-12661cf69d36
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-33999
+ |
+ | [!] Title: WP Data Access < 5.5.9 - Cross-Site Request Forgery
+ |     Fixed in: 5.5.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/4fe0d330-6511-4500-ac3f-b9bb944b8f0e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-43295
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/85a33508-71f2-4aa1-8d51-667eb0690fbd
+ |
+ | Version: 5.3.5 (80% confidence)
+ | Found By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://box/wordpress/wp-content/plugins/wp-data-access/readme.txt
+
+[+] Enumerating Config Backups (via Passive and Aggressive Methods)
+ Checking Config Backups - Time: 00:00:02 <===================================================================================================================================> (137 / 137) 100.00% Time: 00:00:02
+
+[i] No Config Backups Found.
+
+[+] WPScan DB API OK
+ | Plan: free
+ | Requests Done (during the scan): 3
+ | Requests Remaining: 22
+
+[+] Finished: Fri Sep 27 11:00:06 2024
+[+] Requests Done: 146
+[+] Cached Requests: 35
+[+] Data Sent: 37.219 KB
+[+] Data Received: 111.953 KB
+[+] Memory used: 247.934 MB
+[+] Elapsed time: 00:00:07
